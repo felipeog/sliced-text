@@ -5,7 +5,7 @@
 const text = "lorem";
 const numberOfLayers = 10;
 const rotation = 5;
-const lineWidth = window.innerWidth * 0.0005;
+const lineWidthPercentage = 0.0005;
 
 /* ============================================================================
    Elements
@@ -37,6 +37,7 @@ function getPathFromOffsets(outterOffset, innerOffset) {
 }
 
 function getBackTextClipPath(percentage, nextPercentage) {
+  const lineWidth = window.innerWidth * lineWidthPercentage;
   const outterOffset = window.innerWidth * percentage - window.innerHeight / 2 + lineWidth;
   const innerOffset = window.innerWidth * nextPercentage - window.innerHeight / 2 - lineWidth;
   const path = getPathFromOffsets(outterOffset, innerOffset);
@@ -45,6 +46,7 @@ function getBackTextClipPath(percentage, nextPercentage) {
 }
 
 function getFrontTextClipPath(percentage, nextPercentage) {
+  const lineWidth = window.innerWidth * lineWidthPercentage;
   const outterOffset = window.innerWidth * percentage - window.innerHeight / 2 - lineWidth;
   const innerOffset = window.innerWidth * nextPercentage - window.innerHeight / 2 + lineWidth;
   const path = getPathFromOffsets(outterOffset, innerOffset);
@@ -57,6 +59,7 @@ function getBackgroundClipPath() {
 
   for (let i = numberOfLayers; i > 0; i--) {
     const percentage = i / numberOfLayers;
+    const lineWidth = window.innerWidth * lineWidthPercentage;
     const outterOffset = window.innerWidth * percentage - window.innerHeight / 2 + lineWidth;
     const innerOffset = window.innerWidth * percentage - window.innerHeight / 2 - lineWidth;
 
