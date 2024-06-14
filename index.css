@@ -6,17 +6,37 @@
   padding: 0;
 }
 
-html {
-  background-color: white;
+:root {
+  --foreground: white;
+  --background: black;
 }
 
-p {
+html,
+body {
+  background-color: var(--background);
+}
+
+.background {
+  background-color: var(--foreground);
+  position: fixed;
+  inset: 0;
+}
+
+.text {
   position: fixed;
   inset: 0;
   font-family: sans-serif;
   font-weight: bolder;
-  font-size: 30vw;
+  font-size: 35vw;
   line-height: 100dvh;
   text-align: center;
   transform-origin: center left;
+}
+
+.text--back {
+  color: var(--background);
+}
+
+.text--front {
+  color: white;
 }
