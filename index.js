@@ -1,121 +1,137 @@
-const w = window.innerWidth;
-const h = window.innerHeight;
+/* ============================================================================
+   Constants
+============================================================================ */
 
-const word = "lorem";
-const numberOfLayers = 30;
-const rotation = 4;
-const lineWidth = w * 0.0006;
+const text = "lorem";
+const numberOfLayers = 10;
+const rotation = 5;
+const lineWidth = window.innerWidth * 0.0005;
 
-function getBackWordClipPath(percentage, nextPercentage) {
-  const outterOffset = w * percentage - h / 2 + lineWidth;
-  const innerOffset = w * nextPercentage - h / 2 - lineWidth;
+/* ============================================================================
+   Elements
+============================================================================ */
 
+const elements = {
+  background: null,
+  frontTexts: [],
+  backTexts: [],
+};
+
+/* ============================================================================
+   Functions
+============================================================================ */
+
+function getPathFromOffsets(outterOffset, innerOffset) {
   const outterUpper = -outterOffset;
-  const outterLower = h + outterOffset;
-
+  const outterLower = window.innerHeight + outterOffset;
   const innerUpper = -innerOffset;
-  const innerLower = h + innerOffset;
+  const innerLower = window.innerHeight + innerOffset;
 
   return (
-    `path('` +
-    `M 0 ${outterUpper}` +
-    ` ` +
-    `A 1 1 0 0 1 0 ${outterLower}` +
-    ` ` +
-    `L 0 ${innerLower}` +
-    ` ` +
-    `A 1 1 0 0 0 0 ${innerUpper}` +
-    ` ` +
-    `z` +
-    `')`
+    `M 0 ${outterUpper} ` +
+    `A 1 1 0 0 1 0 ${outterLower} ` +
+    `L 0 ${innerLower} ` +
+    `A 1 1 0 0 0 0 ${innerUpper} ` +
+    `z `
   );
 }
 
-function getFrontWordClipPath(percentage, nextPercentage) {
-  const outterOffset = w * percentage - h / 2 - lineWidth;
-  const innerOffset = w * nextPercentage - h / 2 + lineWidth;
+function getBackTextClipPath(percentage, nextPercentage) {
+  const outterOffset = window.innerWidth * percentage - window.innerHeight / 2 + lineWidth;
+  const innerOffset = window.innerWidth * nextPercentage - window.innerHeight / 2 - lineWidth;
+  const path = getPathFromOffsets(outterOffset, innerOffset);
 
-  const outterUpper = -outterOffset;
-  const outterLower = h + outterOffset;
+  return `path('${path}')`;
+}
 
-  const innerUpper = -innerOffset;
-  const innerLower = h + innerOffset;
+function getFrontTextClipPath(percentage, nextPercentage) {
+  const outterOffset = window.innerWidth * percentage - window.innerHeight / 2 - lineWidth;
+  const innerOffset = window.innerWidth * nextPercentage - window.innerHeight / 2 + lineWidth;
+  const path = getPathFromOffsets(outterOffset, innerOffset);
 
-  return (
-    `path('` +
-    `M 0 ${outterUpper}` +
-    ` ` +
-    `A 1 1 0 0 1 0 ${outterLower}` +
-    ` ` +
-    `L 0 ${innerLower}` +
-    ` ` +
-    `A 1 1 0 0 0 0 ${innerUpper}` +
-    ` ` +
-    `z` +
-    `')`
-  );
+  return `path('${path}')`;
 }
 
 function getBackgroundClipPath() {
-  let result = `path('`;
+  let path = `path('`;
 
   for (let i = numberOfLayers; i > 0; i--) {
     const percentage = i / numberOfLayers;
-    const nextPercentage = (i - 1) / numberOfLayers;
+    const outterOffset = window.innerWidth * percentage - window.innerHeight / 2 + lineWidth;
+    const innerOffset = window.innerWidth * percentage - window.innerHeight / 2 - lineWidth;
 
-    const outterOffset = w * percentage - h / 2 - lineWidth;
-    const innerOffset = w * nextPercentage - h / 2 + lineWidth;
-
-    const outterUpper = -outterOffset;
-    const outterLower = h + outterOffset;
-
-    const innerUpper = -innerOffset;
-    const innerLower = h + innerOffset;
-
-    result +=
-      `M 0 ${outterUpper}` +
-      ` ` +
-      `A 1 1 0 0 1 0 ${outterLower}` +
-      ` ` +
-      `L 0 ${innerLower}` +
-      ` ` +
-      `A 1 1 0 0 0 0 ${innerUpper}` +
-      ` ` +
-      `z` +
-      ` `;
+    path += getPathFromOffsets(outterOffset, innerOffset);
   }
 
-  result += `')`;
+  path += `')`;
 
-  return result;
+  return path;
 }
 
+function animateText(elements, keyframes) {
+  const duration = Math.random() * 10_000 + 10_000;
+
+  elements.forEach((e) => {
+    e.animate(keyframes, {
+      duration,
+      iterations: Infinity,
+      easing: "linear",
+    });
+  });
+}
+
+/* ============================================================================
+   Events
+============================================================================ */
+
 window.addEventListener("load", () => {
-  const div = document.createElement("div");
-  div.style.backgroundColor = "black";
-  div.style.position = "fixed";
-  div.style.inset = 0;
-  div.style.clipPath = getBackgroundClipPath();
-  document.body.append(div);
+  const background = document.createElement("div");
+  background.classList.add("background");
+  background.style.clipPath = getBackgroundClipPath();
+  elements.background = background;
+  document.body.append(elements.background);
 
   for (let i = numberOfLayers; i > 0; i--) {
-    const random = Math.random();
-
+    const randomRotation = Math.random() * rotation - rotation / 2;
     const percentage = i / numberOfLayers;
     const nextPercentage = (i - 1) / numberOfLayers;
 
-    const pBack = document.createElement("p");
-    pBack.textContent = word;
-    pBack.style.color = "#000";
-    pBack.style.transform = `rotate(${random * rotation - rotation / 2}deg)`;
-    pBack.style.clipPath = getBackWordClipPath(percentage, nextPercentage);
+    const backText = document.createElement("p");
+    backText.classList.add("text");
+    backText.classList.add("text--back");
+    backText.textContent = text;
+    backText.style.clipPath = getBackTextClipPath(percentage, nextPercentage);
 
-    const pFront = document.createElement("p");
-    pFront.textContent = word;
-    pFront.style.color = "#fff";
-    pFront.style.transform = `rotate(${random * rotation - rotation / 2}deg)`;
-    pFront.style.clipPath = getFrontWordClipPath(percentage, nextPercentage);
+    const frontText = document.createElement("p");
+    frontText.classList.add("text");
+    frontText.classList.add("text--front");
+    frontText.textContent = text;
+    frontText.style.clipPath = getFrontTextClipPath(percentage, nextPercentage);
 
-    document.body.append(pBack, pFront);
+    animateText(
+      [backText, frontText],
+      [
+        { transform: `rotate(${randomRotation}deg)` },
+        { transform: `rotate(${-randomRotation}deg)` },
+        { transform: `rotate(${randomRotation}deg)` },
+      ]
+    );
+
+    elements.backTexts.push(backText);
+    elements.frontTexts.push(frontText);
+    document.body.append(backText, frontText);
+  }
+});
+
+window.addEventListener("resize", () => {
+  elements.background.style.clipPath = getBackgroundClipPath();
+
+  for (let i = numberOfLayers; i > 0; i--) {
+    const percentage = i / numberOfLayers;
+    const nextPercentage = (i - 1) / numberOfLayers;
+    const index = numberOfLayers - i;
+
+    elements.backTexts[index].style.clipPath = getBackTextClipPath(percentage, nextPercentage);
+    elements.frontTexts[index].style.clipPath = getFrontTextClipPath(percentage, nextPercentage);
   }
 });
