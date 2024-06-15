@@ -13,7 +13,7 @@ const initialFontSize = 18;
 const state = {
   text: "sliced text",
   numberOfLayers: 10,
-  lineWidthPercentage: 0.0005,
+  lineWidthPercentage: 0.05,
   animationFrameId: null,
 };
 
@@ -84,7 +84,7 @@ function createRotations() {
   for (let i = 0; i < state.numberOfLayers; i++) {
     const isNegative = Math.random() > 0.5;
     const randomRotation = Math.random() * 5 + 5; // [5, 10)
-    // to balance the animation, left slices move more than the right slices, since the transform origin is in the left
+    // to balance the animation, left slices move more than the right slices, since the transform origin is on the left
     const dampedRotation = randomRotation - randomRotation * (Math.sqrt(i) / Math.sqrt(state.numberOfLayers * 1.5));
     const rotation = isNegative ? dampedRotation * -1 : dampedRotation;
 
@@ -131,7 +131,7 @@ function getPathFromOffsets(outterOffset, innerOffset) {
 }
 
 function getBackTextClipPath(percentage, nextPercentage) {
-  const lineWidth = window.innerWidth * state.lineWidthPercentage;
+  const lineWidth = window.innerWidth * (state.lineWidthPercentage / 100);
   const outterOffset = window.innerWidth * percentage - window.innerHeight / 2 - lineWidth;
   const innerOffset = window.innerWidth * nextPercentage - window.innerHeight / 2 + lineWidth;
   const path = getPathFromOffsets(outterOffset, innerOffset);
@@ -140,7 +140,7 @@ function getBackTextClipPath(percentage, nextPercentage) {
 }
 
 function getFrontTextClipPath(percentage, nextPercentage) {
-  const lineWidth = window.innerWidth * state.lineWidthPercentage;
+  const lineWidth = window.innerWidth * (state.lineWidthPercentage / 100);
   const outterOffset = window.innerWidth * percentage - window.innerHeight / 2 + lineWidth;
   const innerOffset = window.innerWidth * nextPercentage - window.innerHeight / 2 - lineWidth;
   const path = getPathFromOffsets(outterOffset, innerOffset);
@@ -153,7 +153,7 @@ function getBackgroundClipPath() {
 
   for (let i = 1; i < state.numberOfLayers; i++) {
     const percentage = i / state.numberOfLayers;
-    const lineWidth = window.innerWidth * state.lineWidthPercentage;
+    const lineWidth = window.innerWidth * (state.lineWidthPercentage / 100);
     const outterOffset = window.innerWidth * percentage - window.innerHeight / 2 + lineWidth;
     const innerOffset = window.innerWidth * percentage - window.innerHeight / 2 - lineWidth;
 
@@ -193,7 +193,7 @@ function render(dt) {
 
 const gui = new GUI();
 
-gui.title("lil-gui");
+gui.title("sliced text");
 
 gui
   .add({ text: state.text }, "text")
@@ -222,7 +222,7 @@ gui
   .min(2)
   .step(2)
   .onChange((value) => {
-    // stop animation
+    // stop animation to change the elements
     if (state.animationFrameId) {
       cancelAnimationFrame(state.animationFrameId);
     }
@@ -246,21 +246,21 @@ gui
     animation.rotations = createRotations();
     animation.durations = createDurations();
 
-    // start animation
+    // restart animation
     state.animationFrameId = requestAnimationFrame(render);
   });
 
 gui
   .add(state, "lineWidthPercentage")
-  .name("line width")
-  .min(0.0005)
-  .step(0.0005)
+  .name("line width (vw)")
+  .min(0.05)
+  .step(0.05)
   .onChange((value) => {
     state.lineWidthPercentage = value;
   });
 
 /* ============================================================================
-Events
+   Events
 ============================================================================ */
 
 window.addEventListener("load", () => {
