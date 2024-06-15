@@ -94,7 +94,7 @@ export function createGui() {
       },
       "random"
     )
-    .name("Randomize animation");
+    .name("randomize animation");
 
   loadPreset();
   gui.onChange(savePreset);
