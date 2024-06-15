@@ -91,6 +91,7 @@ export function createBackTexts() {
     backText.setAttribute("data-type", "back-text");
     backText.setAttribute("data-index", i);
     backText.setAttribute("clip-path", `url(#back-${i})`);
+    backText.setAttribute("transform-origin", "left center");
 
     slicedText.append(backText);
 
@@ -132,6 +133,7 @@ export function createFrontTexts() {
     frontText.setAttribute("data-type", "front-text");
     frontText.setAttribute("data-index", i);
     frontText.setAttribute("clip-path", `url(#front-${i})`);
+    frontText.setAttribute("transform-origin", "left center");
 
     slicedText.append(frontText);
 

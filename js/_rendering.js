@@ -59,12 +59,10 @@ export function render(dt) {
     const nextPercentage = (i + 1) / state.numberOfLayers;
 
     element.backPaths[i].setAttribute("d", getBackTextClipPath(percentage, nextPercentage));
-    // TODO: add rotation
-    // element.backPaths[i].style.transform = `rotate(${rotation}deg)`;
+    element.backTexts[i].setAttribute("transform", `rotate(${rotation})`);
 
     element.frontPaths[i].setAttribute("d", getFrontTextClipPath(percentage, nextPercentage));
-    // TODO: add rotation
-    // element.frontPaths[i].style.transform = `rotate(${rotation}deg)`;
+    element.frontTexts[i].setAttribute("transform", `rotate(${rotation})`);
   }
 
   state.animationFrameId = requestAnimationFrame(render);
