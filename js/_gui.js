@@ -6,6 +6,7 @@ import { LOCAL_STORAGE_KEY } from "./_constants.js";
 import { render } from "./_rendering.js";
 import { state } from "./_state.js";
 
+// TODO: update gui to handle svg
 export function createGui() {
   const gui = new GUI();
 
