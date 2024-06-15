@@ -51,6 +51,16 @@ export function getBackgroundClipPath() {
 }
 
 export function render(dt) {
+  element.svg.setAttribute("width", window.innerWidth);
+  element.svg.setAttribute("height", window.innerHeight);
+  element.svg.setAttribute("viewBox", `0 0 ${window.innerWidth} ${window.innerHeight}`);
+
+  element.text.setAttribute("x", window.innerWidth / 2);
+  element.text.setAttribute("y", window.innerHeight / 2);
+
+  element.background.setAttribute("width", window.innerWidth);
+  element.background.setAttribute("height", window.innerHeight);
+
   element.backgroundPath.setAttribute("d", getBackgroundClipPath());
 
   for (let i = 0; i < state.numberOfLayers; i++) {

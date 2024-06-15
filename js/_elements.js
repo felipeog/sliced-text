@@ -1,10 +1,6 @@
 import { state } from "./_state.js";
 
 const svg = document.querySelector("#svg");
-svg.setAttribute("width", window.innerWidth);
-svg.setAttribute("height", window.innerHeight);
-svg.setAttribute("viewBox", `0 0 ${window.innerWidth} ${window.innerHeight}`);
-
 const defs = document.querySelector("#defs");
 const slicedText = document.querySelector("#sliced-text");
 
@@ -16,8 +12,6 @@ export function createText() {
   const text = createSvgElement("text");
 
   text.setAttribute("id", "text");
-  text.setAttribute("x", window.innerWidth / 2);
-  text.setAttribute("y", window.innerHeight / 2);
   text.setAttribute("font-family", "sans-serif");
   text.setAttribute("font-weight", "bolder");
   text.setAttribute("font-size", "18vw");
@@ -49,8 +43,6 @@ export function createBackground() {
   background.setAttribute("id", "background");
   background.setAttribute("x", 0);
   background.setAttribute("y", 0);
-  background.setAttribute("width", window.innerWidth);
-  background.setAttribute("height", window.innerHeight);
   background.setAttribute("fill", "white");
   background.setAttribute("clip-path", "url(#background-path)");
 
