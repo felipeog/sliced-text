@@ -82,9 +82,13 @@ function createRotations() {
   const rotations = [];
 
   for (let i = 0; i < state.numberOfLayers; i++) {
-    const randomRotation = Math.random() * 5 - 5 / 2; // [-2.5, 2.5)
+    const isNegative = Math.random() > 0.5;
+    const randomRotation = Math.random() * 5 + 5; // [5, 10)
+    // to balance the animation, left slices move more than the right slices, since the transform origin is in the left
+    const dampedRotation = randomRotation - randomRotation * (Math.sqrt(i) / Math.sqrt(state.numberOfLayers * 1.5));
+    const rotation = isNegative ? dampedRotation * -1 : dampedRotation;
 
-    rotations.push(randomRotation);
+    rotations.push(rotation);
   }
 
   return rotations;
