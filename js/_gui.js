@@ -6,9 +6,9 @@ import { LOCAL_STORAGE_KEY } from "./_constants.js";
 import { render } from "./_rendering.js";
 import { state } from "./_state.js";
 
-const gui = new GUI();
-
 export function createGui() {
+  const gui = new GUI();
+
   gui.title("sliced text");
 
   gui
