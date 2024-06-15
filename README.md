@@ -1,6 +1,6 @@
 # sliced text
 
-Inpiration:
+Inspiration:
 
 - https://pinterest.com/pin/467530005082267938/
 - https://pinterest.com/pin/126030489564629181/
