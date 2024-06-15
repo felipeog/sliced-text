@@ -16,6 +16,8 @@ export function createText() {
   const text = createSvgElement("text");
 
   text.setAttribute("id", "text");
+  text.setAttribute("x", window.innerWidth / 2);
+  text.setAttribute("y", window.innerHeight / 2);
   text.setAttribute("font-family", "sans-serif");
   text.setAttribute("font-weight", "bolder");
   text.setAttribute("font-size", "18vw");
@@ -88,11 +90,6 @@ export function createBackTexts() {
     backText.setAttribute("fill", "black");
     backText.setAttribute("data-type", "back-text");
     backText.setAttribute("data-index", i);
-    // TODO: fix position
-    // backText.setAttribute("x", window.innerWidth / 2);
-    // backText.setAttribute("y", window.innerHeight / 2);
-    backText.setAttribute("x", 0);
-    backText.setAttribute("y", 0);
     backText.setAttribute("clip-path", `url(#back-${i})`);
 
     slicedText.append(backText);
@@ -134,11 +131,6 @@ export function createFrontTexts() {
     frontText.setAttribute("fill", "white");
     frontText.setAttribute("data-type", "front-text");
     frontText.setAttribute("data-index", i);
-    // TODO: fix position
-    // frontText.setAttribute("x", window.innerWidth / 2);
-    // frontText.setAttribute("y", window.innerHeight / 2);
-    frontText.setAttribute("x", 0);
-    frontText.setAttribute("y", 0);
     frontText.setAttribute("clip-path", `url(#front-${i})`);
 
     slicedText.append(frontText);
