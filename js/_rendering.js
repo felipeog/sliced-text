@@ -23,7 +23,7 @@ export function getBackTextClipPath(percentage, nextPercentage) {
   const innerOffset = window.innerWidth * nextPercentage - window.innerHeight / 2 + lineWidth;
   const path = getPathFromOffsets(outterOffset, innerOffset);
 
-  return `path('${path}')`;
+  return path;
 }
 
 export function getFrontTextClipPath(percentage, nextPercentage) {
@@ -32,11 +32,11 @@ export function getFrontTextClipPath(percentage, nextPercentage) {
   const innerOffset = window.innerWidth * nextPercentage - window.innerHeight / 2 - lineWidth;
   const path = getPathFromOffsets(outterOffset, innerOffset);
 
-  return `path('${path}')`;
+  return path;
 }
 
 export function getBackgroundClipPath() {
-  let path = `path('`;
+  let path = "";
 
   for (let i = 1; i < state.numberOfLayers; i++) {
     const percentage = i / state.numberOfLayers;
@@ -47,24 +47,24 @@ export function getBackgroundClipPath() {
     path += getPathFromOffsets(outterOffset, innerOffset);
   }
 
-  path += `')`;
-
   return path;
 }
 
 export function render(dt) {
-  element.background.style.clipPath = getBackgroundClipPath();
+  element.backgroundPath.setAttribute("d", getBackgroundClipPath());
 
   for (let i = 0; i < state.numberOfLayers; i++) {
     const rotation = Math.sin(dt / animation.durations[i]) * animation.rotations[i];
     const percentage = i / state.numberOfLayers;
     const nextPercentage = (i + 1) / state.numberOfLayers;
 
-    element.backTexts[i].style.clipPath = getBackTextClipPath(percentage, nextPercentage);
-    element.backTexts[i].style.transform = `rotate(${rotation}deg)`;
+    element.backPaths[i].setAttribute("d", getBackTextClipPath(percentage, nextPercentage));
+    // TODO: add rotation
+    // element.backPaths[i].style.transform = `rotate(${rotation}deg)`;
 
-    element.frontTexts[i].style.clipPath = getFrontTextClipPath(percentage, nextPercentage);
-    element.frontTexts[i].style.transform = `rotate(${rotation}deg)`;
+    element.frontPaths[i].setAttribute("d", getFrontTextClipPath(percentage, nextPercentage));
+    // TODO: add rotation
+    // element.frontPaths[i].style.transform = `rotate(${rotation}deg)`;
   }
 
   state.animationFrameId = requestAnimationFrame(render);
