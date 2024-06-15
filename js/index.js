@@ -4,14 +4,14 @@ import GUI from "https://cdn.jsdelivr.net/npm/lil-gui@0.19/+esm";
    Constants
 ============================================================================ */
 
-const initialFontSize = 400;
+const initialFontSize = 18;
 
 /* ============================================================================
    State
 ============================================================================ */
 
 const state = {
-  text: "lorem",
+  text: "sliced text",
   numberOfLayers: 10,
   lineWidthPercentage: 0.0005,
   animationFrameId: null,
@@ -147,7 +147,7 @@ function getFrontTextClipPath(percentage, nextPercentage) {
 function getBackgroundClipPath() {
   let path = `path('`;
 
-  for (let i = 0; i < state.numberOfLayers; i++) {
+  for (let i = 1; i < state.numberOfLayers; i++) {
     const percentage = i / state.numberOfLayers;
     const lineWidth = window.innerWidth * state.lineWidthPercentage;
     const outterOffset = window.innerWidth * percentage - window.innerHeight / 2 + lineWidth;
@@ -189,25 +189,32 @@ function render(dt) {
 
 const gui = new GUI();
 
-gui.add({ text: state.text }, "text").onChange((value) => {
-  for (let i = 0; i < state.numberOfLayers; i++) {
-    element.backTexts[i].textContent = value;
-    element.frontTexts[i].textContent = value;
-  }
+gui.title("lil-gui");
 
-  state.text = value;
-});
+gui
+  .add({ text: state.text }, "text")
+  .name("text")
+  .onChange((value) => {
+    for (let i = 0; i < state.numberOfLayers; i++) {
+      element.backTexts[i].textContent = value;
+      element.frontTexts[i].textContent = value;
+    }
+
+    state.text = value;
+  });
 
 gui
   .add({ fontSize: initialFontSize }, "fontSize")
-  .min(16)
-  .step(16)
+  .name("font size (vw)")
+  .min(2)
+  .step(2)
   .onChange((value) => {
-    document.documentElement.style.setProperty("--font-size", `${value}px`);
+    document.documentElement.style.setProperty("--font-size", `${value}vw`);
   });
 
 gui
   .add({ numberOfLayers: state.numberOfLayers }, "numberOfLayers")
+  .name("slices")
   .min(2)
   .step(2)
   .onChange((value) => {
@@ -241,6 +248,7 @@ gui
 
 gui
   .add(state, "lineWidthPercentage")
+  .name("line width")
   .min(0.0005)
   .step(0.0005)
   .onChange((value) => {

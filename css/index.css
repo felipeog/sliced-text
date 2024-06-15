@@ -27,7 +27,7 @@ body {
   inset: 0;
   font-family: sans-serif;
   font-weight: bolder;
-  font-size: var(--font-size, 400px);
+  font-size: var(--font-size, 18vw);
   line-height: 100dvh;
   text-align: center;
   transform-origin: center left;
