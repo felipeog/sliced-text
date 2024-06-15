@@ -75,6 +75,27 @@ export function createGui() {
       state.lineWidthPercentage = value;
     });
 
+  gui
+    .add(
+      {
+        random() {
+          // stop animation to change animation values
+          if (state.animationFrameId) {
+            cancelAnimationFrame(state.animationFrameId);
+          }
+
+          // create new animation values
+          animation.rotations = createRotations();
+          animation.durations = createDurations();
+
+          // restart animation
+          state.animationFrameId = requestAnimationFrame(render);
+        },
+      },
+      "random"
+    )
+    .name("Randomize animation");
+
   loadPreset();
   gui.onChange(savePreset);
 }
