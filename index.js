@@ -38,8 +38,8 @@ function getPathFromOffsets(outterOffset, innerOffset) {
 
 function getBackTextClipPath(percentage, nextPercentage) {
   const lineWidth = window.innerWidth * lineWidthPercentage;
-  const outterOffset = window.innerWidth * percentage - window.innerHeight / 2 + lineWidth;
-  const innerOffset = window.innerWidth * nextPercentage - window.innerHeight / 2 - lineWidth;
+  const outterOffset = window.innerWidth * percentage - window.innerHeight / 2 - lineWidth;
+  const innerOffset = window.innerWidth * nextPercentage - window.innerHeight / 2 + lineWidth;
   const path = getPathFromOffsets(outterOffset, innerOffset);
 
   return `path('${path}')`;
@@ -47,8 +47,8 @@ function getBackTextClipPath(percentage, nextPercentage) {
 
 function getFrontTextClipPath(percentage, nextPercentage) {
   const lineWidth = window.innerWidth * lineWidthPercentage;
-  const outterOffset = window.innerWidth * percentage - window.innerHeight / 2 - lineWidth;
-  const innerOffset = window.innerWidth * nextPercentage - window.innerHeight / 2 + lineWidth;
+  const outterOffset = window.innerWidth * percentage - window.innerHeight / 2 + lineWidth;
+  const innerOffset = window.innerWidth * nextPercentage - window.innerHeight / 2 - lineWidth;
   const path = getPathFromOffsets(outterOffset, innerOffset);
 
   return `path('${path}')`;
@@ -57,7 +57,7 @@ function getFrontTextClipPath(percentage, nextPercentage) {
 function getBackgroundClipPath() {
   let path = `path('`;
 
-  for (let i = numberOfLayers; i > 0; i--) {
+  for (let i = 0; i < numberOfLayers; i++) {
     const percentage = i / numberOfLayers;
     const lineWidth = window.innerWidth * lineWidthPercentage;
     const outterOffset = window.innerWidth * percentage - window.innerHeight / 2 + lineWidth;
@@ -94,29 +94,31 @@ window.addEventListener("load", () => {
   elements.background = background;
   document.body.append(elements.background);
 
-  for (let i = numberOfLayers; i > 0; i--) {
+  for (let i = 0; i < numberOfLayers; i++) {
     const randomRotation = Math.random() * rotation - rotation / 2;
     const percentage = i / numberOfLayers;
-    const nextPercentage = (i - 1) / numberOfLayers;
+    const nextPercentage = (i + 1) / numberOfLayers;
 
     const backText = document.createElement("p");
     backText.classList.add("text");
     backText.classList.add("text--back");
+    backText.setAttribute("data-index", i);
     backText.textContent = text;
     backText.style.clipPath = getBackTextClipPath(percentage, nextPercentage);
 
     const frontText = document.createElement("p");
     frontText.classList.add("text");
     frontText.classList.add("text--front");
+    frontText.setAttribute("data-index", i);
     frontText.textContent = text;
     frontText.style.clipPath = getFrontTextClipPath(percentage, nextPercentage);
 
     animateText(
       [backText, frontText],
       [
-        { transform: `rotate(${randomRotation}deg)` },
         { transform: `rotate(${-randomRotation}deg)` },
         { transform: `rotate(${randomRotation}deg)` },
+        { transform: `rotate(${-randomRotation}deg)` },
       ]
     );
 
@@ -129,12 +131,11 @@ window.addEventListener("load", () => {
 window.addEventListener("resize", () => {
   elements.background.style.clipPath = getBackgroundClipPath();
 
-  for (let i = numberOfLayers; i > 0; i--) {
+  for (let i = 0; i < numberOfLayers; i++) {
     const percentage = i / numberOfLayers;
-    const nextPercentage = (i - 1) / numberOfLayers;
-    const index = numberOfLayers - i;
+    const nextPercentage = (i + 1) / numberOfLayers;
 
-    elements.backTexts[index].style.clipPath = getBackTextClipPath(percentage, nextPercentage);
-    elements.frontTexts[index].style.clipPath = getFrontTextClipPath(percentage, nextPercentage);
+    elements.backTexts[i].style.clipPath = getBackTextClipPath(percentage, nextPercentage);
+    elements.frontTexts[i].style.clipPath = getFrontTextClipPath(percentage, nextPercentage);
   }
 });
