@@ -1,15 +1,22 @@
 import GUI from "https://cdn.jsdelivr.net/npm/lil-gui@0.19/+esm";
 
 import { animation, createDurations, createRotations } from "./_animation.js";
-import { createBackground, createBackTexts, createFrontTexts, element } from "./_elements.js";
+import {
+  createBackground,
+  createBackgroundPath,
+  createBackPaths,
+  createBackTexts,
+  createFrontPaths,
+  createFrontTexts,
+  element,
+} from "./_elements.js";
 import { LOCAL_STORAGE_KEY } from "./_constants.js";
 import { render } from "./_rendering.js";
 import { state } from "./_state.js";
 
-// TODO: update gui to handle svg
-export function createGui() {
-  const gui = new GUI();
+const gui = new GUI();
 
+export function createGui() {
   gui.title("sliced text");
 
   gui
@@ -17,8 +24,7 @@ export function createGui() {
     .name("text")
     .onChange((value) => {
       for (let i = 0; i < state.numberOfLayers; i++) {
-        element.backTexts[i].textContent = value;
-        element.frontTexts[i].textContent = value;
+        element.text.textContent = value;
       }
 
       state.text = value;
@@ -30,7 +36,7 @@ export function createGui() {
     .min(2)
     .step(2)
     .onChange((value) => {
-      document.documentElement.style.setProperty("--font-size", `${value}vw`);
+      element.text.setAttribute("font-size", `${value}vw`);
     });
 
   gui
@@ -39,16 +45,20 @@ export function createGui() {
     .min(2)
     .step(2)
     .onChange((value) => {
-      // stop animation to change the elements
+      // stop animation to change elements
       if (state.animationFrameId) {
         cancelAnimationFrame(state.animationFrameId);
       }
 
-      // remove current elements from the dom
+      // remove current elements from svg
       element.background.remove();
+      element.backgroundPath.parentNode.remove();
 
       for (let i = 0; i < state.numberOfLayers; i++) {
+        element.backPaths[i].parentNode.remove();
         element.backTexts[i].remove();
+
+        element.frontPaths[i].parentNode.remove();
         element.frontTexts[i].remove();
       }
 
@@ -57,8 +67,11 @@ export function createGui() {
 
       // create new elements and animation values with new number of layers
       element.background = createBackground();
+      element.backgroundPath = createBackgroundPath();
       element.backTexts = createBackTexts();
+      element.backPaths = createBackPaths();
       element.frontTexts = createFrontTexts();
+      element.frontPaths = createFrontPaths();
 
       animation.rotations = createRotations();
       animation.durations = createDurations();
