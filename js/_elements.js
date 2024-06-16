@@ -43,7 +43,7 @@ export function createBackground() {
   background.setAttribute("id", "background");
   background.setAttribute("x", 0);
   background.setAttribute("y", 0);
-  background.setAttribute("fill", "white");
+  background.setAttribute("fill", "var(--foreground)");
   background.setAttribute("clip-path", "url(#background-path)");
 
   slicedText.append(background);
@@ -79,7 +79,7 @@ export function createBackTexts() {
     const backText = createSvgElement("use");
 
     backText.setAttribute("href", "#text");
-    backText.setAttribute("fill", "black");
+    backText.setAttribute("fill", "var(--background)");
     backText.setAttribute("data-type", "back-text");
     backText.setAttribute("data-index", i);
     backText.setAttribute("clip-path", `url(#back-${i})`);
@@ -121,7 +121,7 @@ export function createFrontTexts() {
     const frontText = createSvgElement("use");
 
     frontText.setAttribute("href", "#text");
-    frontText.setAttribute("fill", "white");
+    frontText.setAttribute("fill", "var(--foreground)");
     frontText.setAttribute("data-type", "front-text");
     frontText.setAttribute("data-index", i);
     frontText.setAttribute("clip-path", `url(#front-${i})`);
