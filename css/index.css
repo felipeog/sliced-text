@@ -19,6 +19,9 @@ body {
 #svg {
   position: fixed;
   inset: 0;
+}
+
+#sliced-text {
   pointer-events: none;
   user-select: none;
 }

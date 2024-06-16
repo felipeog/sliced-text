@@ -1,12 +1,15 @@
+import { element } from "./_elements.js";
 import { createGui } from "./_gui.js";
-import { render, resizeElements } from "./_rendering.js";
+import { render } from "./_rendering.js";
 import { state } from "./_state.js";
 
 window.addEventListener("load", () => {
   createGui();
-  resizeElements();
 
   state.animationFrameId = requestAnimationFrame(render);
 });
 
-window.addEventListener("resize", resizeElements);
+element.svg.addEventListener("click", (event) => {
+  state.mouseX = event.x;
+  state.mouseY = event.y;
+});
