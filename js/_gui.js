@@ -2,13 +2,12 @@ import GUI from "https://cdn.jsdelivr.net/npm/lil-gui@0.19/+esm";
 
 import { animation, createDurations, createRotations } from "./_animation.js";
 import { createBackPaths, createBackTexts, createFrontPaths, createFrontTexts, element } from "./_elements.js";
+import { getBackgroundClipPath, getBackTextClipPath, getFrontTextClipPath, render } from "./_rendering.js";
 import { LOCAL_STORAGE_KEY } from "./_constants.js";
-import { getBackTextClipPath, getBackgroundClipPath, getFrontTextClipPath, render } from "./_rendering.js";
 import { state } from "./_state.js";
 
-const gui = new GUI();
-
 export function createGui() {
+  const gui = new GUI();
   gui.title("sliced text");
 
   gui
@@ -128,11 +127,11 @@ export function createGui() {
     )
     .name("randomize animation");
 
-  loadPreset();
-  gui.onChange(savePreset);
+  loadPreset(gui);
+  gui.onChange(() => savePreset(gui));
 }
 
-function loadPreset() {
+function loadPreset(gui) {
   const presetInLocalStorage = localStorage.getItem(LOCAL_STORAGE_KEY);
 
   if (!presetInLocalStorage) return;
@@ -147,7 +146,7 @@ function loadPreset() {
   }
 }
 
-function savePreset() {
+function savePreset(gui) {
   const preset = gui.save();
 
   localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(preset));
