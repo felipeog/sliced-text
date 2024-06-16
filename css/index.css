@@ -16,29 +16,9 @@ body {
   background-color: var(--background);
 }
 
-.background {
-  background-color: var(--foreground);
+#svg {
   position: fixed;
   inset: 0;
-}
-
-.text {
-  position: fixed;
-  inset: 0;
-  font-family: sans-serif;
-  font-weight: bolder;
-  font-size: var(--font-size, 18vw);
-  line-height: 100dvh;
-  text-align: center;
-  transform-origin: center left;
   pointer-events: none;
   user-select: none;
-}
-
-.text--back {
-  color: var(--background);
-}
-
-.text--front {
-  color: var(--foreground);
 }
