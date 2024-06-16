@@ -23,7 +23,7 @@ export function createGui() {
 
   gui
     .add({ fontSize: state.fontSize }, "fontSize")
-    .name("font size (vw)")
+    .name("font size")
     .min(2)
     .step(2)
     .onChange((value) => {
@@ -79,7 +79,7 @@ export function createGui() {
 
   gui
     .add(state, "lineWidthPercentage")
-    .name("line width (vw)")
+    .name("line width")
     .min(0.05)
     .step(0.05)
     .onChange((value) => {
@@ -105,6 +105,10 @@ export function createGui() {
       // restart animation
       state.animationFrameId = requestAnimationFrame(render);
     });
+
+  gui.add(state, "originX").name("origin x").min(0).max(1).step(0.01);
+
+  gui.add(state, "originY").name("origin y").min(0).max(1).step(0.01);
 
   gui
     .add(

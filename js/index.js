@@ -9,7 +9,8 @@ window.addEventListener("load", () => {
   state.animationFrameId = requestAnimationFrame(render);
 });
 
-element.svg.addEventListener("click", (event) => {
-  state.mouseX = event.x;
-  state.mouseY = event.y;
-});
+// TODO: update lil-gui
+// element.svg.addEventListener("click", (event) => {
+//   state.originX = Number((event.x / window.innerWidth).toFixed(2));
+//   state.originY = Number((event.y / window.innerHeight).toFixed(2));
+// });
