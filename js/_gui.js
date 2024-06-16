@@ -1,15 +1,7 @@
 import GUI from "https://cdn.jsdelivr.net/npm/lil-gui@0.19/+esm";
 
 import { animation, createDurations, createRotations } from "./_animation.js";
-import {
-  createBackground,
-  createBackgroundPath,
-  createBackPaths,
-  createBackTexts,
-  createFrontPaths,
-  createFrontTexts,
-  element,
-} from "./_elements.js";
+import { createBackPaths, createBackTexts, createFrontPaths, createFrontTexts, element } from "./_elements.js";
 import { LOCAL_STORAGE_KEY } from "./_constants.js";
 import { getBackTextClipPath, getBackgroundClipPath, getFrontTextClipPath, render } from "./_rendering.js";
 import { state } from "./_state.js";
