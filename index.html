@@ -13,9 +13,15 @@
 
   <body>
     <svg id="svg" xmlns="http://www.w3.org/2000/svg">
-      <defs id="defs"></defs>
+      <defs id="defs">
+        <filter id="distortion">
+          <!-- TODO: baseFrequency, numOctaves, and scale, tied to window width -->
+          <feTurbulence type="turbulence" baseFrequency="0.025" numOctaves="2" seed="1994" result="turbulence" />
+          <feDisplacementMap in2="turbulence" in="SourceGraphic" scale="4" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+      </defs>
 
-      <g id="sliced-text"></g>
+      <g id="sliced-text" filter="url(#distortion)"></g>
     </svg>
 
     <script type="module" src="./js/index.js"></script>
