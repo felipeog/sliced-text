@@ -11,7 +11,7 @@ import {
   element,
 } from "./_elements.js";
 import { LOCAL_STORAGE_KEY } from "./_constants.js";
-import { render } from "./_rendering.js";
+import { getBackTextClipPath, getBackgroundClipPath, getFrontTextClipPath, render } from "./_rendering.js";
 import { state } from "./_state.js";
 
 const gui = new GUI();
@@ -50,10 +50,7 @@ export function createGui() {
         cancelAnimationFrame(state.animationFrameId);
       }
 
-      // remove current elements from svg
-      element.background.remove();
-      element.backgroundPath.parentNode.remove();
-
+      // remove clip-path and text elements from svg
       for (let i = 0; i < state.numberOfLayers; i++) {
         element.backPaths[i].parentNode.remove();
         element.backTexts[i].remove();
@@ -66,8 +63,6 @@ export function createGui() {
       state.numberOfLayers = value;
 
       // create new elements and animation values with new number of layers
-      element.background = createBackground();
-      element.backgroundPath = createBackgroundPath();
       element.backTexts = createBackTexts();
       element.backPaths = createBackPaths();
       element.frontTexts = createFrontTexts();
@@ -75,6 +70,17 @@ export function createGui() {
 
       animation.rotations = createRotations();
       animation.durations = createDurations();
+
+      // redraw clip-paths since the layers number changed
+      element.backgroundPath.setAttribute("d", getBackgroundClipPath());
+
+      for (let i = 0; i < state.numberOfLayers; i++) {
+        const percentage = i / state.numberOfLayers;
+        const nextPercentage = (i + 1) / state.numberOfLayers;
+
+        element.backPaths[i].setAttribute("d", getBackTextClipPath(percentage, nextPercentage));
+        element.frontPaths[i].setAttribute("d", getFrontTextClipPath(percentage, nextPercentage));
+      }
 
       // restart animation
       state.animationFrameId = requestAnimationFrame(render);
@@ -86,7 +92,27 @@ export function createGui() {
     .min(0.05)
     .step(0.05)
     .onChange((value) => {
+      // stop animation to change elements
+      if (state.animationFrameId) {
+        cancelAnimationFrame(state.animationFrameId);
+      }
+
+      // update state
       state.lineWidthPercentage = value;
+
+      // redraw clip-paths since the line width changed
+      element.backgroundPath.setAttribute("d", getBackgroundClipPath());
+
+      for (let i = 0; i < state.numberOfLayers; i++) {
+        const percentage = i / state.numberOfLayers;
+        const nextPercentage = (i + 1) / state.numberOfLayers;
+
+        element.backPaths[i].setAttribute("d", getBackTextClipPath(percentage, nextPercentage));
+        element.frontPaths[i].setAttribute("d", getFrontTextClipPath(percentage, nextPercentage));
+      }
+
+      // restart animation
+      state.animationFrameId = requestAnimationFrame(render);
     });
 
   gui
