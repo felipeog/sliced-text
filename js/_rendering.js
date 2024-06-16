@@ -51,6 +51,17 @@ export function getBackgroundClipPath() {
 }
 
 export function render(dt) {
+  for (let i = 0; i < state.numberOfLayers; i++) {
+    const rotation = Math.sin(dt / animation.durations[i]) * animation.rotations[i];
+
+    element.backTexts[i].setAttribute("transform", `rotate(${rotation})`);
+    element.frontTexts[i].setAttribute("transform", `rotate(${rotation})`);
+  }
+
+  state.animationFrameId = requestAnimationFrame(render);
+}
+
+export function resizeElements() {
   element.svg.setAttribute("width", window.innerWidth);
   element.svg.setAttribute("height", window.innerHeight);
   element.svg.setAttribute("viewBox", `0 0 ${window.innerWidth} ${window.innerHeight}`);
@@ -64,16 +75,10 @@ export function render(dt) {
   element.backgroundPath.setAttribute("d", getBackgroundClipPath());
 
   for (let i = 0; i < state.numberOfLayers; i++) {
-    const rotation = Math.sin(dt / animation.durations[i]) * animation.rotations[i];
     const percentage = i / state.numberOfLayers;
     const nextPercentage = (i + 1) / state.numberOfLayers;
 
     element.backPaths[i].setAttribute("d", getBackTextClipPath(percentage, nextPercentage));
-    element.backTexts[i].setAttribute("transform", `rotate(${rotation})`);
-
     element.frontPaths[i].setAttribute("d", getFrontTextClipPath(percentage, nextPercentage));
-    element.frontTexts[i].setAttribute("transform", `rotate(${rotation})`);
   }
-
-  state.animationFrameId = requestAnimationFrame(render);
 }
