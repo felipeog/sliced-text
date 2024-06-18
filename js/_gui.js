@@ -70,6 +70,7 @@ export function createGui() {
     .add({ sliceWidth: state.sliceWidth }, "sliceWidth")
     .name("slice width")
     .min(0.001)
+    .max(0.5)
     .step(0.001)
     .onChange((value) => {
       // stop animation to change elements
@@ -87,8 +88,9 @@ export function createGui() {
   gui
     .add(state, "lineWidth")
     .name("line width")
-    .min(0.001)
-    .step(0.001)
+    .min(0.0001)
+    .max(0.001)
+    .step(0.0001)
     .onChange((value) => {
       // stop animation to change elements
       if (state.animationFrameId) {
