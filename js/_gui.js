@@ -2,8 +2,8 @@ import GUI from "https://cdn.jsdelivr.net/npm/lil-gui@0.19/+esm";
 
 import { animation, createDurations, createRotations } from "./_animation.js";
 import { createBackPaths, createBackTexts, createFrontPaths, createFrontTexts, element } from "./_elements.js";
-import { getBackgroundClipPath, getBackTextClipPath, getFrontTextClipPath, render } from "./_rendering.js";
 import { LOCAL_STORAGE_KEY } from "./_constants.js";
+import { render } from "./_rendering.js";
 import { state } from "./_state.js";
 
 export function createGui() {
@@ -14,7 +14,7 @@ export function createGui() {
     .add({ text: state.text }, "text")
     .name("text")
     .onChange((value) => {
-      for (let i = 0; i < state.numberOfLayers; i++) {
+      for (let i = 0; i < state.numberOfSlices; i++) {
         element.text.textContent = value;
       }
 
@@ -24,17 +24,17 @@ export function createGui() {
   gui
     .add({ fontSize: state.fontSize }, "fontSize")
     .name("font size")
-    .min(2)
-    .step(2)
+    .min(1)
+    .step(1)
     .onChange((value) => {
       element.text.setAttribute("font-size", `${value}vw`);
     });
 
   gui
-    .add({ numberOfLayers: state.numberOfLayers }, "numberOfLayers")
+    .add({ numberOfSlices: state.numberOfSlices }, "numberOfSlices")
     .name("slices")
-    .min(2)
-    .step(2)
+    .min(1)
+    .step(1)
     .onChange((value) => {
       // stop animation to change elements
       if (state.animationFrameId) {
@@ -42,7 +42,7 @@ export function createGui() {
       }
 
       // remove clip-path and text elements from svg
-      for (let i = 0; i < state.numberOfLayers; i++) {
+      for (let i = 0; i < state.numberOfSlices; i++) {
         element.backPaths[i].parentNode.remove();
         element.backTexts[i].remove();
 
@@ -51,9 +51,9 @@ export function createGui() {
       }
 
       // update state
-      state.numberOfLayers = value;
+      state.numberOfSlices = value;
 
-      // create new elements and animation values with new number of layers
+      // create new elements and animation values with new number of slices
       element.backTexts = createBackTexts();
       element.backPaths = createBackPaths();
       element.frontTexts = createFrontTexts();
@@ -62,26 +62,15 @@ export function createGui() {
       animation.rotations = createRotations();
       animation.durations = createDurations();
 
-      // redraw clip-paths since the layers number changed
-      element.backgroundPath.setAttribute("d", getBackgroundClipPath());
-
-      for (let i = 0; i < state.numberOfLayers; i++) {
-        const percentage = i / state.numberOfLayers;
-        const nextPercentage = (i + 1) / state.numberOfLayers;
-
-        element.backPaths[i].setAttribute("d", getBackTextClipPath(percentage, nextPercentage));
-        element.frontPaths[i].setAttribute("d", getFrontTextClipPath(percentage, nextPercentage));
-      }
-
       // restart animation
       state.animationFrameId = requestAnimationFrame(render);
     });
 
   gui
-    .add(state, "lineWidthPercentage")
-    .name("line width")
-    .min(0.05)
-    .step(0.05)
+    .add({ sliceWidth: state.sliceWidth }, "sliceWidth")
+    .name("slice width")
+    .min(0.001)
+    .step(0.001)
     .onChange((value) => {
       // stop animation to change elements
       if (state.animationFrameId) {
@@ -89,18 +78,25 @@ export function createGui() {
       }
 
       // update state
-      state.lineWidthPercentage = value;
+      state.sliceWidth = value;
 
-      // redraw clip-paths since the line width changed
-      element.backgroundPath.setAttribute("d", getBackgroundClipPath());
+      // restart animation
+      state.animationFrameId = requestAnimationFrame(render);
+    });
 
-      for (let i = 0; i < state.numberOfLayers; i++) {
-        const percentage = i / state.numberOfLayers;
-        const nextPercentage = (i + 1) / state.numberOfLayers;
-
-        element.backPaths[i].setAttribute("d", getBackTextClipPath(percentage, nextPercentage));
-        element.frontPaths[i].setAttribute("d", getFrontTextClipPath(percentage, nextPercentage));
+  gui
+    .add(state, "lineWidth")
+    .name("line width")
+    .min(0.001)
+    .step(0.001)
+    .onChange((value) => {
+      // stop animation to change elements
+      if (state.animationFrameId) {
+        cancelAnimationFrame(state.animationFrameId);
       }
+
+      // update state
+      state.lineWidth = value;
 
       // restart animation
       state.animationFrameId = requestAnimationFrame(render);

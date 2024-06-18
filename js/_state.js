@@ -1,9 +1,10 @@
 export const state = {
   animationFrameId: null,
   fontSize: 18,
-  lineWidthPercentage: 0.05,
+  lineWidth: 0.001,
+  numberOfSlices: 10,
   originX: 0,
-  originY: window.innerHeight / 2 / window.innerHeight,
-  numberOfLayers: 10,
+  originY: 0.5,
+  sliceWidth: 0.1,
   text: "sliced text",
 };

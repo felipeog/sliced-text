@@ -53,7 +53,7 @@ export function createBackground() {
 export function createBackPaths() {
   const backPaths = [];
 
-  for (let i = 0; i < state.numberOfLayers; i++) {
+  for (let i = 0; i < state.numberOfSlices; i++) {
     const clipPath = createSvgElement("clipPath");
     const path = createSvgElement("path");
 
@@ -73,7 +73,7 @@ export function createBackPaths() {
 export function createBackTexts() {
   const backTexts = [];
 
-  for (let i = 0; i < state.numberOfLayers; i++) {
+  for (let i = 0; i < state.numberOfSlices; i++) {
     const backText = createSvgElement("use");
 
     backText.setAttribute("href", "#text");
@@ -93,7 +93,7 @@ export function createBackTexts() {
 export function createFrontPaths() {
   const frontPaths = [];
 
-  for (let i = 0; i < state.numberOfLayers; i++) {
+  for (let i = 0; i < state.numberOfSlices; i++) {
     const clipPath = createSvgElement("clipPath");
     const path = createSvgElement("path");
 
@@ -114,7 +114,7 @@ export function createFrontPaths() {
 export function createFrontTexts() {
   const frontTexts = [];
 
-  for (let i = 0; i < state.numberOfLayers; i++) {
+  for (let i = 0; i < state.numberOfSlices; i++) {
     const frontText = createSvgElement("use");
 
     frontText.setAttribute("href", "#text");
